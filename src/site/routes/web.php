@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PostArticleController;
+use App\Http\Controllers\TopPageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +18,19 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/toshiki',function () {
+    return '<h1>hello toshiki</h1>';
+});
+
+Route::get('/login',function () {
+    return view('login');
+});
+
+Route::get('/register',function () {
+    return view('register');
+});
+
+Route::get('/posts',[TopPageController::class, 'topPageView']);
+
+Route::post('/posts',[PostArticleController::class, 'articleInsert']);
