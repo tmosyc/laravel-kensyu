@@ -1,2 +1,4 @@
 .env_file
+.DS_Store
+/src/.DS_Store
 /docker/mysql/data
