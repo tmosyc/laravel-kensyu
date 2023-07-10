@@ -32,7 +32,7 @@ class LoginController
         if ($auth_user != null) {
             $auth_password_check = self::loginPasswordAuth($login_form_password, $auth_user->password);
 
-            if (isset($auth_user->email) && $auth_password_check === 'success') {
+            if (isset($auth_user->email) && $auth_password_check === true) {
                 Session::put('name',$auth_user->name);
                 Session::put('email', $auth_user->email);
                 return redirect('posts');
@@ -47,16 +47,16 @@ class LoginController
     /**
      * @param $request_password
      * @param $db_hash_password
-     * @return boolean
+     * @return bool
      */
 
      private static function loginPasswordAuth($request_password, $db_hash_password)
      {
 
          if (Hash::check($request_password, $db_hash_password)){
-             $auth_check = 'success';
+             $auth_check = true;
          } else {
-             $auth_check = 'fail';
+             $auth_check = false;
          }
          return $auth_check;
      }
