@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -13,21 +14,22 @@ class PostRegisterController
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function registerNextView()
+    public static function registerNextView(RegisterRequest $request)
     {
-        self::registerUserInfo(request());
+        self::registerUserInfo($request);
         return redirect('/posts');
     }
 
     /**
-     * @param Request $request
+     * @param RegisterRequest $request
      * @return void
      */
-    public static function registerUserInfo(Request $request): void
+    public static function registerUserInfo(RegisterRequest $request): void
     {
-        $name = $request->input('register_name');
-        $email = $request->input('register_email');
-        $password = $request->input('register_password');
+        $validatedData = $request->validated();
+        $name = $validatedData['register_name'];
+        $email = $validatedData['register_email'];
+        $password = $validatedData['register_password'];
         $password_hash = Hash::make($password);
 
         $insert_user = [

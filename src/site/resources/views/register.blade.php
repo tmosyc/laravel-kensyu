@@ -16,6 +16,13 @@
         </style>
     </head>
     <body>
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
         <form action="/register" method="post">
             @csrf
             <input type="text" name="register_name" placeholder="名前">

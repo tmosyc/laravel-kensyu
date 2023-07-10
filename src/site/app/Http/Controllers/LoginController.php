@@ -50,7 +50,7 @@ class LoginController
      * @return bool
      */
 
-     private static function loginPasswordAuth($request_password, $db_hash_password)
+     private static function loginPasswordAuth($request_password, $db_hash_password): bool
      {
 
          if (Hash::check($request_password, $db_hash_password)){
