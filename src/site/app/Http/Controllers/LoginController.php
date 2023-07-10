@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
+use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,10 +25,11 @@ class LoginController
      * @param Request $request
      * @return \Illuminate\Http\RedirectResponse
      */
-    public static function loginAuth(Request $request)
+    public static function loginAuth(LoginRequest $request)
     {
-        $login_form_email = $request->input('login_email');
-        $login_form_password = $request->input('login_password');
+        $validatedData = $request->validated();
+        $login_form_email = $validatedData['login_email'];
+        $login_form_password = $validatedData['login_password'];
         $auth_user = User::where('email', $login_form_email)->first();
 
         if ($auth_user != null) {
