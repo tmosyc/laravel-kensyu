@@ -9,17 +9,20 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController
 {
+    /**
+     * @return \Illuminate\Contracts\View\View
+     */
     public static function loginPageView()
     {
         return view('login');
     }
 
-//    public static function loginNextView()
-//    {
-//        self::loginAuth(request());
-//        return redirect('/posts');
-//    }
 
+    /**
+     * ログイン認証
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public static function loginAuth(Request $request)
     {
         $login_form_email = $request->input('login_email');
@@ -40,6 +43,12 @@ class LoginController
             return redirect('login');
         }
     }
+
+    /**
+     * @param $request_password
+     * @param $db_hash_password
+     * @return boolean
+     */
 
      private static function loginPasswordAuth($request_password, $db_hash_password)
      {
