@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -27,7 +28,7 @@ class LoginController
     {
         $login_form_email = $request->input('login_email');
         $login_form_password = $request->input('login_password');
-        $auth_user = DB::table('users')->where('email', $login_form_email)->first();
+        $auth_user = User::where('email', $login_form_email)->first();
 
         if ($auth_user != null) {
             $auth_password_check = self::loginPasswordAuth($login_form_password, $auth_user->password);

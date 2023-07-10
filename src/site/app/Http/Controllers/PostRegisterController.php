@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -37,7 +38,7 @@ class PostRegisterController
             'email' => $email,
             'password' => $password_hash
         ];
-        DB::table('users')->insert($insert_user);
+        User::create($insert_user);
         Session::put('name',$name);
         Session::put('email',$email);
     }
