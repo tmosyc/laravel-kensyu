@@ -38,8 +38,12 @@ class PostRegisterController
             'email' => $email,
             'password' => $password_hash
         ];
-        User::create($insert_user);
-        Session::put('name',$name);
-        Session::put('email',$email);
+        try {
+            User::create($insert_user);
+            Session::put('name',$name);
+            Session::put('email',$email);
+        } catch (\Exception $e){
+            info($e ->getMessage());
+        }
     }
 }

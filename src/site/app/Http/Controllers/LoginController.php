@@ -30,20 +30,25 @@ class LoginController
         $validatedData = $request->validated();
         $login_form_email = $validatedData['login_email'];
         $login_form_password = $validatedData['login_password'];
-        $auth_user = User::where('email', $login_form_email)->first();
+        try {
+            $auth_user = User::where('email', $login_form_email)->first();
 
-        if ($auth_user != null) {
-            $auth_password_check = self::loginPasswordAuth($login_form_password, $auth_user->password);
+            if ($auth_user != null) {
+                $auth_password_check = self::loginPasswordAuth($login_form_password, $auth_user->password);
 
-            if (isset($auth_user->email) && $auth_password_check === true) {
-                Session::put('name',$auth_user->name);
-                Session::put('email', $auth_user->email);
-                return redirect('posts');
+                if (isset($auth_user->email) && $auth_password_check === true) {
+                    Session::put('name', $auth_user->name);
+                    Session::put('email', $auth_user->email);
+                    return redirect('posts');
+                } else {
+                    return redirect('login');
+                }
             } else {
                 return redirect('login');
             }
-        } else {
-            return redirect('login');
+        } catch (\Exception $e) {
+           info($e ->getMessage());
+           return redirect('login')->with('db_error','データの取得に失敗しました');
         }
     }
 
