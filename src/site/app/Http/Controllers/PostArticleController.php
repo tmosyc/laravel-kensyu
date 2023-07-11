@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
@@ -8,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 
 class PostArticleController
 {
+    /**
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\View
+     */
     public static function articleInsert(Request $request)
     {
         $title = $request->input('title');

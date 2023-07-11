@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PostArticleController;
+use App\Http\Controllers\PostRegisterController;
+use App\Http\Controllers\RegisterPageController;
 use App\Http\Controllers\TopPageController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,3 +37,13 @@ Route::get('/register',function () {
 Route::get('/posts',[TopPageController::class, 'topPageView']);
 
 Route::post('/posts',[PostArticleController::class, 'articleInsert']);
+
+Route::get('/register',[RegisterPageController::class,'registerPageView']);
+
+Route::post('/register',[PostRegisterController::class,'registerNextView']);
+
+Route::get('/login', [LoginController::class, 'loginPageView']);
+
+Route::post('/login', [LoginController::class, 'loginAuth']);
+
+Route::get('/logout', [LogoutController::class,'logout']);
