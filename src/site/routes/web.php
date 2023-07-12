@@ -1,10 +1,13 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostArticleController;
 use App\Http\Controllers\PostRegisterController;
 use App\Http\Controllers\RegisterPageController;
 use App\Http\Controllers\TopPageController;
+use App\Http\Controllers\DetailController;
+use App\Http\Controllers\UpdateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,7 +39,7 @@ Route::get('/register',function () {
 
 Route::get('/posts',[TopPageController::class, 'topPageView']);
 
-Route::post('/posts',[PostArticleController::class, 'articleInsert']);
+Route::post('/posts',[PostArticleController::class, 'postTopPage']);
 
 Route::get('/register',[RegisterPageController::class,'registerPageView']);
 
@@ -47,3 +50,19 @@ Route::get('/login', [LoginController::class, 'loginPageView']);
 Route::post('/login', [LoginController::class, 'loginAuth']);
 
 Route::get('/logout', [LogoutController::class,'logout']);
+
+Route::get('/posts/{number}', function ($number) {
+    $detail_view_controller = app()->make(DetailController::class);
+    return $detail_view_controller->detailView($number);
+});
+
+Route::get('/posts/{number}/update', function ($number) {
+    $update_controller = app()->make(UpdateController::class);
+    return $update_controller->updateView($number);
+});
+
+Route::put('/posts/{number}/update', function ($number) {
+    $update_controller = app()->make(UpdateController::class);
+    return $update_controller->updateData($number, request());
+});
+
