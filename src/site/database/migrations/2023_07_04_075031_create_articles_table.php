@@ -19,6 +19,7 @@ return new class extends Migration
             $table->text('content');
             $table->integer('thumbnail_image_id');
             $table->timestamp('created_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
         });
     }
 
