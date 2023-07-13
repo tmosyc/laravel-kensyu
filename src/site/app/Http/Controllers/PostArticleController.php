@@ -6,33 +6,51 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class PostArticleController
 {
+    public static function postTopPage(string $session_email)
+    {
+        if (self::login_check($session_email)===true){
+            self::articleInsert(request(), $session_email);
+            $article_list = Article::all();
+            return view('posts',['articles'=>$article_list]);
+        } else {
+            return redirect('posts');
+        }
+    }
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\View\View
      */
-    public static function articleInsert(Request $request)
+    public static function articleInsert(Request $request, string $session_email)
     {
+        if (self::login_check($session_email))
         $title = $request->input('title');
         $content = $request->input('content');
+        $user_info = self::returnUserInfo($session_email);
         $insert_article = [
-            'user_id' => '1',
+            'user_id' => $user_info[0],
             'title' => $title,
             'content' => $content,
             'thumbnail_image_id' => '1',
         ];
         DB::table('articles')->insert($insert_article);
-        $article_list = Article::all();
-
-        return view('posts',['articles'=>$article_list]);
-
-//        $insert_article = [
-//            'user_id' => '1',
-//            'title' => 'article1',
-//            'content' => 'ララベルの一つ目の記事です',
-//            'thumbnail_image_id' => '1',
-//        ];
+    }
+    public static function returnUserInfo(string $session_email): array
+    {
+        $user_record = DB::table('users')->where('email',$session_email)->first();
+        return [$user_record->id,$user_record->name];
+    }
+    private static function login_check(string $session_email):bool
+    {
+        if ($session_email !== null)
+        {
+            $check = true;
+        } else {
+            $check = false;
+        }
+        return $check;
     }
 }

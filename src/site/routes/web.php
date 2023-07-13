@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostArticleController;
 use App\Http\Controllers\PostRegisterController;
 use App\Http\Controllers\RegisterPageController;
 use App\Http\Controllers\TopPageController;
+use App\Http\Controllers\DetailController;
+use App\Http\Controllers\UpdateController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +40,10 @@ Route::get('/register',function () {
 
 Route::get('/posts',[TopPageController::class, 'topPageView']);
 
-Route::post('/posts',[PostArticleController::class, 'articleInsert']);
+Route::post('/posts',function() {
+    $session_email = Session::get('email');
+    return app()->call([PostArticleController::class, 'postTopPage'],compact('session_email'));
+});
 
 Route::get('/register',[RegisterPageController::class,'registerPageView']);
 
@@ -47,3 +54,20 @@ Route::get('/login', [LoginController::class, 'loginPageView']);
 Route::post('/login', [LoginController::class, 'loginAuth']);
 
 Route::get('/logout', [LogoutController::class,'logout']);
+
+Route::get('/posts/{article_id}', function ($article_id) {
+    $detail_view_controller = app()->make(DetailController::class);
+    return $detail_view_controller->detailView($article_id);
+});
+
+Route::get('/posts/{article_id}/update', function ($article_id) {
+    $update_controller = app()->make(UpdateController::class);
+    return $update_controller->updateView($article_id);
+});
+
+Route::put('/posts/{article_id}/update', function ($article_id) {
+    $session_id = Session::get('id');
+    $update_controller = app()->make(UpdateController::class);
+    return $update_controller->updateData($article_id, $session_id,request());
+});
+

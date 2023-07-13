@@ -24,7 +24,7 @@
             <button type="submit">投稿</button>
         </form>
         @foreach($articles as $article)
-            <h2>{{  $article->title }}</h2>
+            <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
             <p>{{  $article->content }}</p>
             <p>{{  $article->user_id }}</p>
         @endforeach
