@@ -29,7 +29,7 @@ class PostArticleController
         if (self::login_check())
         $title = $request->input('title');
         $content = $request->input('content');
-        $user_info = self::return_user_info();
+        $user_info = self::returnUserInfo();
         $insert_article = [
             'user_id' => $user_info[0],
             'title' => $title,
@@ -38,7 +38,7 @@ class PostArticleController
         ];
         DB::table('articles')->insert($insert_article);
     }
-    public static function return_user_info(): array
+    public static function returnUserInfo(): array
     {
         $session_email = Session::get('email');
         $user_record = DB::table('users')->where('email',$session_email)->first();

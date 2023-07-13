@@ -56,13 +56,13 @@ Route::get('/posts/{number}', function ($number) {
     return $detail_view_controller->detailView($number);
 });
 
-Route::get('/posts/{number}/update', function ($number) {
+Route::get('/posts/{article_id}/update', function ($article_id) {
     $update_controller = app()->make(UpdateController::class);
-    return $update_controller->updateView($number);
+    return $update_controller->updateView($article_id);
 });
 
-Route::put('/posts/{number}/update', function ($number) {
+Route::put('/posts/{article_id}/update', function ($article_id) {
     $update_controller = app()->make(UpdateController::class);
-    return $update_controller->updateData($number, request());
+    return $update_controller->updateData($article_id, request());
 });
 
