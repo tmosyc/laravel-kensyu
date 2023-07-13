@@ -3,20 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Repo\DetailArticleRepo;
 use Illuminate\Support\Facades\DB;
 
 class DetailController
 {
-    public static function detailView($number)
+    public static function detailView($article_id)
     {
-        $detail_article = self::detail_article_repo($number);
+        $detail_article = DetailArticleRepo::detailArticle($article_id);
         return view('detail',['detail_info'=>$detail_article]);
-    }
-
-    private static function detail_article_repo($number)
-    {
-        $detail_article = Article::where('article_id',$number)->first();
-        return $detail_article;
-
     }
 }
