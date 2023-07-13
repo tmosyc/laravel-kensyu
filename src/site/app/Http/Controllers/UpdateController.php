@@ -14,16 +14,15 @@ use Illuminate\Support\Facades\DB;
 
 class UpdateController
 {
-    public static function updateView($article_id)
+    public static function updateView(int $article_id)
     {
         $article_id_list = ArticleRepo::articleIdList();
         if ($article_id_list->contains('article_id', $article_id)) {
-            return view('update',['article_id'=>$article_id]);
-        } else {
-            return view('notfound');
+            return view('update', ['article_id' => $article_id]);
         }
+        return view('notfound');
     }
-    public static function updateData($article_id,$session_id,Request $request)
+    public static function updateData(int $article_id,int $session_id,Request $request)
     {
         $article = Article::where([
             ['article_id', $article_id],

@@ -24,9 +24,9 @@ class PostArticleController
      * @param Request $request
      * @return \Illuminate\Contracts\View\View
      */
-    public static function articleInsert(Request $request, $session_email)
+    public static function articleInsert(Request $request, string $session_email)
     {
-        if (self::login_check())
+        if (self::login_check($session_email))
         $title = $request->input('title');
         $content = $request->input('content');
         $user_info = self::returnUserInfo($session_email);

@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class DetailController
 {
-    public static function detailView($article_id)
+    public static function detailView(int $article_id)
     {
         $article_id_list = ArticleRepo::articleIdList();
         if ($article_id_list->contains('article_id', $article_id)) {
