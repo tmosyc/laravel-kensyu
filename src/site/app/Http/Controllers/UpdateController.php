@@ -23,11 +23,12 @@ class UpdateController
             return view('notfound');
         }
     }
-    public static function updateData($article_id,Request $request)
+    public static function updateData($article_id,$session_id,Request $request)
     {
-        $article = Article::where('article_id', $article_id);
-        $user = User::where('id', $article->first()->user_id)->first();
-
+        $article = Article::where([
+            ['article_id', $article_id],
+            ['user_id',$session_id]
+            ]);
         $article_id_list = ArticleRepo::articleIdList();
 
         if (!$article_id_list->contains('article_id', $article_id)) {
@@ -35,7 +36,7 @@ class UpdateController
         }
 
         try {
-            if ($article && $user->email === Session::get('email')) {
+            if ($article) {
                 $article->update([
                     'title' => $request->input('update_title'),
                     'content' => $request->input('update_content')

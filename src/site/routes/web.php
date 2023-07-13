@@ -9,6 +9,7 @@ use App\Http\Controllers\TopPageController;
 use App\Http\Controllers\DetailController;
 use App\Http\Controllers\UpdateController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Session;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,7 +40,10 @@ Route::get('/register',function () {
 
 Route::get('/posts',[TopPageController::class, 'topPageView']);
 
-Route::post('/posts',[PostArticleController::class, 'postTopPage']);
+Route::post('/posts',function() {
+    $session_email = Session::get('email');
+    return app()->call([PostArticleController::class, 'postTopPage'],compact('session_email'));
+});
 
 Route::get('/register',[RegisterPageController::class,'registerPageView']);
 
@@ -62,7 +66,8 @@ Route::get('/posts/{article_id}/update', function ($article_id) {
 });
 
 Route::put('/posts/{article_id}/update', function ($article_id) {
+    $session_id = Session::get('id');
     $update_controller = app()->make(UpdateController::class);
-    return $update_controller->updateData($article_id, request());
+    return $update_controller->updateData($article_id, $session_id,request());
 });
 

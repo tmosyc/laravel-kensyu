@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Session;
 
 class PostArticleController
 {
-    public static function postTopPage()
+    public static function postTopPage(string $session_email)
     {
-        if (self::login_check()===true){
-            self::articleInsert(request());
+        if (self::login_check($session_email)===true){
+            self::articleInsert(request(), $session_email);
             $article_list = Article::all();
             return view('posts',['articles'=>$article_list]);
         } else {
@@ -24,12 +24,12 @@ class PostArticleController
      * @param Request $request
      * @return \Illuminate\Contracts\View\View
      */
-    public static function articleInsert(Request $request)
+    public static function articleInsert(Request $request, $session_email)
     {
         if (self::login_check())
         $title = $request->input('title');
         $content = $request->input('content');
-        $user_info = self::returnUserInfo();
+        $user_info = self::returnUserInfo($session_email);
         $insert_article = [
             'user_id' => $user_info[0],
             'title' => $title,
@@ -38,15 +38,14 @@ class PostArticleController
         ];
         DB::table('articles')->insert($insert_article);
     }
-    public static function returnUserInfo(): array
+    public static function returnUserInfo(string $session_email): array
     {
-        $session_email = Session::get('email');
         $user_record = DB::table('users')->where('email',$session_email)->first();
         return [$user_record->id,$user_record->name];
     }
-    private static function login_check():bool
+    private static function login_check(string $session_email):bool
     {
-        if (Session::get('email') !== null)
+        if ($session_email !== null)
         {
             $check = true;
         } else {

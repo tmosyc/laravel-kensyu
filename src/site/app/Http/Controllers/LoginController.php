@@ -19,7 +19,6 @@ class LoginController
         return view('login');
     }
 
-
     /**
      * ログイン認証
      * @param Request $request
@@ -37,6 +36,7 @@ class LoginController
                 $auth_password_check = self::loginPasswordAuth($login_form_password, $auth_user->password);
 
                 if (isset($auth_user->email) && $auth_password_check === true) {
+                    Session::put('id', $auth_user->id);
                     Session::put('name', $auth_user->name);
                     Session::put('email', $auth_user->email);
                     return redirect('posts');
