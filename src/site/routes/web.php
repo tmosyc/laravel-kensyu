@@ -51,9 +51,9 @@ Route::post('/login', [LoginController::class, 'loginAuth']);
 
 Route::get('/logout', [LogoutController::class,'logout']);
 
-Route::get('/posts/{number}', function ($number) {
+Route::get('/posts/{article_id}', function ($article_id) {
     $detail_view_controller = app()->make(DetailController::class);
-    return $detail_view_controller->detailView($number);
+    return $detail_view_controller->detailView($article_id);
 });
 
 Route::get('/posts/{article_id}/update', function ($article_id) {
