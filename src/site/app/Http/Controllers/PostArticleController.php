@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Session;
 
 class PostArticleController
 {
-    public static function postTopPage(string $session_email)
+    public static function postTopPage(?string $session_email)
     {
-        if (self::login_check($session_email)===true){
+        if (self::loginCheck($session_email)===true){
             self::articleInsert(request(), $session_email);
             $article_list = Article::all();
             return view('posts',['articles'=>$article_list]);
         } else {
-            return redirect('posts');
+            return view('posts',['error'=>'ログインされていないので投稿できませんでした']);
         }
     }
     /**
@@ -26,7 +26,7 @@ class PostArticleController
      */
     public static function articleInsert(Request $request, string $session_email)
     {
-        if (self::login_check($session_email))
+        if (self::loginCheck($session_email))
         $title = $request->input('title');
         $content = $request->input('content');
         $user_info = self::returnUserInfo($session_email);
@@ -38,12 +38,12 @@ class PostArticleController
         ];
         DB::table('articles')->insert($insert_article);
     }
-    public static function returnUserInfo(string $session_email): array
+    public static function returnUserInfo(?string $session_email): array
     {
         $user_record = DB::table('users')->where('email',$session_email)->first();
         return [$user_record->id,$user_record->name];
     }
-    private static function login_check(string $session_email):bool
+    private static function loginCheck(?string $session_email):bool
     {
         if ($session_email !== null)
         {

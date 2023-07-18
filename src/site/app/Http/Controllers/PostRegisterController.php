@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\Repo\UserRegisterRepo;
+
 
 class PostRegisterController
 {
@@ -42,6 +44,7 @@ class PostRegisterController
             User::create($insert_user);
             Session::put('name',$name);
             Session::put('email',$email);
+            Session::put('id',UserRegisterRepo::sessionId($email));
         } catch (\Exception $e){
             info($e ->getMessage());
         }
