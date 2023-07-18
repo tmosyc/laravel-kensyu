@@ -16,5 +16,8 @@
     <form action="/posts/{{$detail_info->article_id}}/delete">
         <button type="submit">削除</button>
     </form>
+    <form action="/posts">
+        <button type="submit">記事一覧ページに戻る</button>
+    </form>
 </body>
 </html>

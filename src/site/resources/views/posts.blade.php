@@ -20,8 +20,11 @@
             @csrf
             <input type="text" name="title" placeholder="タイトル">
             <input type="text" name="content" placeholder="テキスト">
+            <input type='file' id='images' name='images[]' accept='image/*' multiple>
+            <h5 class='image-attribute'></h5>
 
             <button type="submit">投稿</button>
+            <script src="{{ asset('/js/ImageNameDisplay.js') }}"></script>
         </form>
         @if(isset($error))
             <h4>{{$error}}</h4>

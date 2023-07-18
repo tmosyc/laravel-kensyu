@@ -35,6 +35,7 @@ class PostArticleController
             'title' => $title,
             'content' => $content,
             'thumbnail_image_id' => '1',
+//            'images'=>[]
         ];
         DB::table('articles')->insert($insert_article);
     }

@@ -7,12 +7,14 @@ use App\Models\Article;
 use App\Models\User;
 use App\Repo\ArticleRepo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
 use Tests\TestCase;
 
 class UpdateTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
     /**
      * A basic unit test example.
      */
@@ -23,6 +25,8 @@ class UpdateTest extends TestCase
 
     public function test_データがアップデートされたかどうかを確認すること()
     {
+        $this->withoutMiddleware();
+
         $inspection_title = 'タイトル';
         $inspection_content = 'コンテンツ';
         $update_title = 'アップデートタイトル';
