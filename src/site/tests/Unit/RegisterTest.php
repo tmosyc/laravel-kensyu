@@ -11,7 +11,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 
-class registerTest extends TestCase
+class RegisterTest extends TestCase
 {
     use RefreshDatabase;
     use WithFaker;
@@ -37,7 +37,7 @@ class registerTest extends TestCase
         );
     }
 
-    public function test_セッションに登録するための関数が動いていること()
+    public function test_セッションに登録するための関数から値が取れること()
     {
         $email = 'mike@example.com';
         User::factory()->create([
@@ -48,10 +48,8 @@ class registerTest extends TestCase
 
         $user = User::where('email', $email)->first();
 
-        $user_id = UserRegisterRepo::sessionId($user->email);
+        $login_user = UserRegisterRepo::loginUser($user->email);
 
-        $maxId = User::max('id');
-
-        self::assertSame($user_id,$maxId);
+        self::assertSame('mike',$login_user->name);
     }
 }

@@ -38,7 +38,7 @@ class UpdateTest extends TestCase
 
         ArticleRepo::updateArticleRepo($article,$update_title,$update_content);
         $update_article = Article::where('article_id',1)->first();
-        self::assertNotEquals($inspection_title,$update_article->title);
-        self::assertNotEquals($inspection_content,$update_article->content);
+        self::assertSame($update_title,$update_article->title);
+        self::assertSame($update_content,$update_article->content);
     }
 }

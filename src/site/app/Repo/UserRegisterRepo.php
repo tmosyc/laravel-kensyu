@@ -8,10 +8,9 @@ use App\Models\User;
 
 class UserRegisterRepo
 {
-    public static function sessionId($session_email)
+    public static function loginUser(string $session_email): User
     {
         $user = User::where('email',$session_email)->first();
-        $user_id=$user->id;
-        return $user_id;
+        return $user;
     }
 }

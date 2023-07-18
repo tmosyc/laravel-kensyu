@@ -44,7 +44,8 @@ class PostRegisterController
             User::create($insert_user);
             Session::put('name',$name);
             Session::put('email',$email);
-            Session::put('id',UserRegisterRepo::sessionId($email));
+            $login_user = UserRegisterRepo::loginUser($email);
+            Session::put('id',$login_user->id);
         } catch (\Exception $e){
             info($e ->getMessage());
         }
