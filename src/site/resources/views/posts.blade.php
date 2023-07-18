@@ -23,10 +23,16 @@
 
             <button type="submit">投稿</button>
         </form>
-        @foreach($articles as $article)
-            <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
-            <p>{{  $article->content }}</p>
-            <p>{{  $article->user_id }}</p>
-        @endforeach
+        @if(isset($error))
+            <h4>{{$error}}</h4>
+        @endif
+
+        @if(isset($articles))
+            @foreach($articles as $article)
+                <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
+                <p>{{  $article->content }}</p>
+                <p>{{  $article->user_id }}</p>
+            @endforeach
+        @endif
     </body>
 </html>

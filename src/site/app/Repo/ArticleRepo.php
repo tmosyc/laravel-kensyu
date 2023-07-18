@@ -3,6 +3,7 @@
 namespace App\Repo;
 
 use App\Models\Article;
+use Illuminate\Support\Facades\DB;
 
 class ArticleRepo
 {
@@ -16,5 +17,23 @@ class ArticleRepo
     {
         $article_id_list = Article::select('article_id')->get();
         return $article_id_list;
+    }
+
+    public static function updateArticleRepo($article,$update_title, $update_content)
+    {
+        try {
+            if ($article) {
+                $article->update([
+                    'title' => $update_title,
+                    'content' => $update_content
+                ]);
+                DB::commit();
+                return response()->json(['message' => 'Success'], 200);
+            }
+        } catch (\Exception $e) {
+            info($e);
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 }

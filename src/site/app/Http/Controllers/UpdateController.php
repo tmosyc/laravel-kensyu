@@ -22,8 +22,11 @@ class UpdateController
         }
         return view('notfound');
     }
-    public static function updateData(int $article_id,int $session_id,Request $request)
+    public static function updateData(int $article_id,?int $session_id,Request $request)
     {
+        $update_title=$request->input('update_title');
+        $update_content=$request->input('update_content');
+
         $article = Article::where([
             ['article_id', $article_id],
             ['user_id',$session_id]
@@ -34,19 +37,14 @@ class UpdateController
             return view('notfound');
         }
 
-        try {
-            if ($article) {
-                $article->update([
-                    'title' => $request->input('update_title'),
-                    'content' => $request->input('update_content')
-                ]);
-                DB::commit();
+        if ($article) {
+            $response = ArticleRepo::updateArticleRepo($article,$update_title,$update_content);
+            $status = $response->getStatusCode();
+            if ($status===500){
+                return redirect('/posts/',$article_id.'/update');
             }
-        } catch (\Exception $e) {
-            info($e);
-            DB::rollBack();
-            return redirect('/posts/'.$article_id . '/update');
         }
+
         return redirect('/posts/'.$article_id);
     }
 }
