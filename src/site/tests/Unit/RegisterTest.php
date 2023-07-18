@@ -48,7 +48,7 @@ class RegisterTest extends TestCase
 
         $user = User::where('email', $email)->first();
 
-        $login_user = UserRegisterRepo::loginUser($user->email);
+        $login_user = UserRegisterRepo::getByLoginUserInfo($user->email);
 
         self::assertSame('mike',$login_user->name);
     }
