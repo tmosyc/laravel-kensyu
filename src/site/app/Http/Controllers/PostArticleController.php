@@ -77,6 +77,7 @@ class PostArticleController
             $resource_id = $resource_id + 1;
         }
     }
+
     private static function thumbnailCheck(Request $request)
     {
         $image_array = [];
