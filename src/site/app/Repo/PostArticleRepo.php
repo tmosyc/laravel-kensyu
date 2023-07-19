@@ -22,6 +22,5 @@ class PostArticleRepo
             'mime'=>$mime
         ];
         Image::insert($insert_image);
-
     }
 }

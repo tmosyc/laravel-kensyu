@@ -35,7 +35,13 @@
                 <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
                 <p>{{  $article->content }}</p>
                 <p>{{  $article->user_id }}</p>
-                <img src=>
+                @if($article-> thumbnail_image_id)
+                    @if(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.jpg'))
+                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.jpg')}}" width="250" height="200">
+                    @elseif(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail . '.png'))
+                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.'. '.png')}}" width="250" height="200">
+                    @endif
+                @endif
             @endforeach
         @endif
     </body>

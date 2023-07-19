@@ -32,15 +32,18 @@ class PostArticleController
         $content = $request->input('content');
         $user_info = self::returnUserInfo($session_email);
         $thumbnail_number = self::thumbnailCheck(request());
+
         $insert_article = [
             'user_id' => $user_info[0],
             'title' => $title,
             'content' => $content,
-            'thumbnail_image_id' => $thumbnail_number,
+            'thumbnail_image_id' => $thumbnail_number
         ];
 
         $article_id = Article::insertGetId($insert_article);
-        self::storeImage(request(),$article_id);
+        self::storeArticleImage(request(),$article_id);
+        self::storeThumbnail($article_id,$thumbnail_number,request());
+
     }
     public static function returnUserInfo(?string $session_email): array
     {
@@ -58,17 +61,17 @@ class PostArticleController
         return $check;
     }
 
-    public static function storeImage(Request $request,int $article_id)
+    public static function storeArticleImage(Request $request,int $article_id)
     {
         $images = $request->file('images');
         $resource_id = 0;
         foreach ($images as $image) {
             $mime = $image->getClientOriginalExtension();
             if ($mime==='jpg'){
-                $image->storeAs('public/'.$article_id, $resource_id . ".jpg");
+                $image->storeAs('public/article/'.$article_id, $resource_id . ".jpg");
             }
             if ($mime==='png'){
-                $image->storeAs('public/'.$article_id, $resource_id . ".jpg");
+                $image->storeAs('public/article/'.$article_id, $resource_id . ".png");
             }
             PostArticleRepo::insertImageRepo($article_id,$resource_id,$mime);
             $resource_id = $resource_id + 1;
@@ -94,9 +97,18 @@ class PostArticleController
         return $thumbnail_number;
     }
 
-    private static function thumnailUpload()
+    private static function storeThumbnail(int $article_id,int $thumbnail_number,Request $request)
     {
-
+        if ($request->hasFile('images')) {
+            $thumbnail_image = $request->file('images')[$thumbnail_number];
+            $mime = $thumbnail_image->getClientOriginalExtension();
+            if ($mime === 'jpg') {
+                $thumbnail_image->storeAs('public/thumbnail/' . $article_id, $thumbnail_number . ".jpg");
+            }
+            if ($mime === 'png') {
+                $thumbnail_image->storeAs('public/thumbnail/' . $article_id, $thumbnail_number . ".png");
+            }
+        }
+        return $mime;
     }
-
 }
