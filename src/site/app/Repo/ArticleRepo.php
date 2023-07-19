@@ -3,6 +3,7 @@
 namespace App\Repo;
 
 use App\Models\Article;
+use App\Models\Image;
 use Illuminate\Support\Facades\DB;
 
 class ArticleRepo
@@ -10,6 +11,7 @@ class ArticleRepo
     public static function detailArticle(int $article_id)
     {
         $detail_article = Article::where('article_id',$article_id)->first();
+
         return $detail_article;
     }
 
@@ -35,5 +37,11 @@ class ArticleRepo
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 500);
         }
+    }
+
+    public static function detailImages(int $article_id)
+    {
+        $article_images = Image::where('article_id',$article_id)->get();
+        return $article_images;
     }
 }

@@ -38,10 +38,8 @@ class PostArticleController
             'thumbnail_image_id' => '1',
         ];
 
-
         $article_id = Article::insertGetId($insert_article);
         self::storeImage(request(),$article_id);
-
     }
     public static function returnUserInfo(?string $session_email): array
     {
@@ -66,10 +64,10 @@ class PostArticleController
         foreach ($images as $image) {
             $mime = $image->getClientOriginalExtension();
             if ($mime==='jpg'){
-                $image->storeAs('public' . $article_id, $resource_id . ".jpg");
+                $image->storeAs('public/'.$article_id, $resource_id . ".jpg");
             }
             if ($mime==='png'){
-                $image->storeAs('public' . $article_id, $resource_id . ".jpg");
+                $image->storeAs('public/'.$article_id, $resource_id . ".jpg");
             }
             PostArticleRepo::insertImageRepo($article_id,$resource_id,$mime);
             $resource_id = $resource_id + 1;
