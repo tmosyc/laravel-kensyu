@@ -31,11 +31,12 @@ class PostArticleController
         $title = $request->input('title');
         $content = $request->input('content');
         $user_info = self::returnUserInfo($session_email);
+        $thumbnail_number = self::thumbnailCheck(request());
         $insert_article = [
             'user_id' => $user_info[0],
             'title' => $title,
             'content' => $content,
-            'thumbnail_image_id' => '1',
+            'thumbnail_image_id' => $thumbnail_number,
         ];
 
         $article_id = Article::insertGetId($insert_article);
@@ -72,6 +73,30 @@ class PostArticleController
             PostArticleRepo::insertImageRepo($article_id,$resource_id,$mime);
             $resource_id = $resource_id + 1;
         }
+    }
+    private static function thumbnailCheck(Request $request)
+    {
+        $image_array = [];
+
+        if ($request->hasFile('images')) {
+            $files = $request->file('images');
+
+            foreach ($files as $file) {
+                $fileName = $file->getClientOriginalName();
+                $image_array[] = $fileName;
+
+                $thumbnail_image_name = $request->check;
+                $thumbnail_number = array_search($thumbnail_image_name, $image_array);
+            }
+        } else {
+            $thumbnail_number=null;
+        }
+        return $thumbnail_number;
+    }
+
+    private static function thumnailUpload()
+    {
 
     }
+
 }

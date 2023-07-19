@@ -35,6 +35,7 @@
                 <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
                 <p>{{  $article->content }}</p>
                 <p>{{  $article->user_id }}</p>
+                <img src=>
             @endforeach
         @endif
     </body>
