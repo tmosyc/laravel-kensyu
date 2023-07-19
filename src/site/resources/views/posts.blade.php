@@ -16,7 +16,7 @@
         <button type="button" onclick="location.href='/register'">登録フォームはこちら</button>
         <button type="button" onclick="location.href='/login'">ログインフォームはこちら</button>
         <button type="button" onclick="location.href='/logout'">ログアウトはこちらをクリック</button>
-        <form action="/posts" method="post">
+        <form action="/posts" method="post" enctype="multipart/form-data">
             @csrf
             <input type="text" name="title" placeholder="タイトル">
             <input type="text" name="content" placeholder="テキスト">

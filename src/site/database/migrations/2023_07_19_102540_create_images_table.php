@@ -15,6 +15,7 @@ return new class extends Migration
             $table->increments('image_id');
             $table->integer('article_id');
             $table->integer('resource_id');
+            $table->char('mime',10);
             $table->timestamps();
         });
     }
