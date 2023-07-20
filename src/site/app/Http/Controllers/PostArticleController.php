@@ -31,9 +31,10 @@ class PostArticleController extends Controller
         if (self::loginCheck($session_email))
         $title = $request->input('title');
         $content = $request->input('content');
-        $images = $request->input('content');
+        $images = $request->file('images');
+        $images_has = $request->hasFile('images');
         $user_info = self::returnUserInfo($session_email);
-        $image_array = self::imageArray($images);
+        $image_array = self::imageArray($images,$images_has);
         $thumbnail_image_name = $request->input('check');
         $thumbnail_number = self::thumbnailCheck($image_array,$thumbnail_image_name);
 
@@ -92,13 +93,10 @@ class PostArticleController extends Controller
         return $thumbnail_number;
     }
 
-    public static function imageArray(Request $request): array
+    public static function imageArray($files,$images_has): array
     {
         $image_array = [];
-
-        if ($request->hasFile('images')) {
-            $files = $request->file('images');
-
+        if ($images_has) {
             foreach ($files as $file) {
                 $fileName = $file->getClientOriginalName();
                 $image_array[] = $fileName;
