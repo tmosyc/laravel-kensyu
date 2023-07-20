@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use mysql_xdevapi\Collection;
 
-class PostArticleController
+class PostArticleController extends Controller
 {
     public static function postTopPage(?string $session_email)
     {
@@ -25,7 +26,7 @@ class PostArticleController
      * @param Request $request
      * @return \Illuminate\Contracts\View\View
      */
-    public static function articleInsert(Request $request, string $session_email)
+    public static function articleInsert(Request $request, string $session_email): void
     {
         if (self::loginCheck($session_email))
         $title = $request->input('title');
@@ -43,8 +44,8 @@ class PostArticleController
         $article_id = Article::insertGetId($insert_article);
         self::storeArticleImage(request(),$article_id);
         self::storeThumbnail($article_id,$thumbnail_number,request());
-
     }
+
     public static function returnUserInfo(?string $session_email): array
     {
         $user_record = DB::table('users')->where('email',$session_email)->first();
@@ -61,7 +62,7 @@ class PostArticleController
         return $check;
     }
 
-    public static function storeArticleImage(Request $request,int $article_id)
+    public static function storeArticleImage(Request $request,int $article_id): void
     {
         $images = $request->file('images');
         $resource_id = 0;
@@ -78,7 +79,19 @@ class PostArticleController
         }
     }
 
-    private static function thumbnailCheck(Request $request)
+    public static function thumbnailCheck(Request $request)
+    {
+        $image_array = self::imageArray(request());
+        if ($image_array && $request->input('check')) {
+            $thumbnail_image_name = $request->input('check');
+            $thumbnail_number = array_search($thumbnail_image_name, $image_array);
+        } else {
+            $thumbnail_number = null;
+        }
+        return $thumbnail_number;
+    }
+
+    public static function imageArray(Request $request)
     {
         $image_array = [];
 
@@ -88,17 +101,12 @@ class PostArticleController
             foreach ($files as $file) {
                 $fileName = $file->getClientOriginalName();
                 $image_array[] = $fileName;
-
-                $thumbnail_image_name = $request->check;
-                $thumbnail_number = array_search($thumbnail_image_name, $image_array);
             }
-        } else {
-            $thumbnail_number=null;
         }
-        return $thumbnail_number;
+        return $image_array;
     }
 
-    private static function storeThumbnail(int $article_id,int $thumbnail_number,Request $request)
+    private static function storeThumbnail(int $article_id,int $thumbnail_number,Request $request): string
     {
         if ($request->hasFile('images')) {
             $thumbnail_image = $request->file('images')[$thumbnail_number];

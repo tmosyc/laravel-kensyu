@@ -38,8 +38,8 @@
                 @if($article-> thumbnail_image_id)
                     @if(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.jpg'))
                         <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.jpg')}}" width="250" height="200">
-                    @elseif(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail . '.png'))
-                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.'. '.png')}}" width="250" height="200">
+                    @elseif(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.png'))
+                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.png')}}" width="250" height="200">
                     @endif
                 @endif
             @endforeach

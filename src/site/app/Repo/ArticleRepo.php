@@ -39,7 +39,7 @@ class ArticleRepo
         }
     }
 
-    public static function detailImages(int $article_id)
+    public static function getByDetailImages(int $article_id)
     {
         $article_images = Image::where('article_id',$article_id)->get();
         return $article_images;
