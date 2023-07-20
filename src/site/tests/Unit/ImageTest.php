@@ -34,7 +34,7 @@ class ImageTest extends TestCase
         );
     }
 
-    public function test_画像の名前の配列が取得できること()
+    public function test_画像の名前の配列が取得できること(): void
     {
         $dummyFile1 = UploadedFile::fake()->image('test_image1.jpg');
         $dummyFile2 = UploadedFile::fake()->image('test_image2.jpg');
@@ -59,5 +59,19 @@ class ImageTest extends TestCase
         $controller = new PostArticleController();
         $result = $controller->imageArray($mock);
         self::assertSame($collect_array,$result);
+    }
+
+    public function test_サムネイルが取得できること():void
+    {
+        $image_array = [
+            'test_image1.jpg',
+            'test_image2.jpg',
+            'test_image3.jpg'
+        ];
+
+        $thumbnail_image_name = 'test_image2.jpg';
+
+        $thumbnail_number = PostArticleController::thumbnailCheck($image_array,$thumbnail_image_name);
+        self::assertSame($thumbnail_number,1);
     }
 }

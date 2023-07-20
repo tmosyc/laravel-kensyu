@@ -31,8 +31,11 @@ class PostArticleController extends Controller
         if (self::loginCheck($session_email))
         $title = $request->input('title');
         $content = $request->input('content');
+        $images = $request->input('content');
         $user_info = self::returnUserInfo($session_email);
-        $thumbnail_number = self::thumbnailCheck(request());
+        $image_array = self::imageArray($images);
+        $thumbnail_image_name = $request->input('check');
+        $thumbnail_number = self::thumbnailCheck($image_array,$thumbnail_image_name);
 
         $insert_article = [
             'user_id' => $user_info[0],
@@ -79,11 +82,9 @@ class PostArticleController extends Controller
         }
     }
 
-    public static function thumbnailCheck(Request $request)
+    public static function thumbnailCheck($image_array,$thumbnail_image_name): int | null
     {
-        $image_array = self::imageArray(request());
-        if ($image_array && $request->input('check')) {
-            $thumbnail_image_name = $request->input('check');
+        if ($image_array && $thumbnail_image_name) {
             $thumbnail_number = array_search($thumbnail_image_name, $image_array);
         } else {
             $thumbnail_number = null;
@@ -91,7 +92,7 @@ class PostArticleController extends Controller
         return $thumbnail_number;
     }
 
-    public static function imageArray(Request $request)
+    public static function imageArray(Request $request): array
     {
         $image_array = [];
 
