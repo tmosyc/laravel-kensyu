@@ -26,7 +26,7 @@
             @if(isset($tag_list))
                 <select name="tags[]" multiple>
                 @foreach($tag_list as $tag)
-                    <option value={{$tag->tagname}}>{{$tag->tagname}}</option>
+                    <option value={{$tag->tag_id}}>{{$tag->tagname}}</option>
                 @endforeach
                 </select>
             @endif

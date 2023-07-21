@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleTag;
 use App\Repo\ArticleTagRepo;
 use App\Repo\PostArticleRepo;
 use Illuminate\Http\Request;
@@ -10,6 +11,7 @@ use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use mysql_xdevapi\Collection;
+use App\DTO\TagDTO;
 
 class PostArticleController extends Controller
 {
@@ -36,6 +38,7 @@ class PostArticleController extends Controller
         $images = $request->file('images');
         $images_has = $request->hasFile('images');
         $thumbnail_image_name = $request->input('check');
+        $tag_id = $request->input('tags');
         $user_info = self::returnUserInfo($session_email);
         $image_array = self::imageArray($images,$images_has);
         $thumbnail_number = self::thumbnailCheck($image_array,$thumbnail_image_name);
@@ -50,6 +53,12 @@ class PostArticleController extends Controller
         $article_id = Article::insertGetId($insert_article);
         self::storeArticleImage(request(),$article_id);
         self::storeThumbnail($article_id,$thumbnail_number,request());
+
+
+        $insert_tag_array=self::createInsertTagArray($article_id,$tag_id);
+        foreach ($insert_tag_array as $insert_tag)
+            ArticleTag::create(['article_tag_id'=>$insert_tag->article_tag_id, 'tag_id'=>$insert_tag->tag_id]);
+
     }
 
     public static function returnUserInfo(?string $session_email): array
@@ -120,5 +129,18 @@ class PostArticleController extends Controller
             }
         }
         return $mime;
+    }
+
+    public static function createInsertTagArray($article_id,$tag_id_array)
+    {
+        $insert_tag_dto = [];
+        foreach ($tag_id_array as $tag_id) {
+            $tag_dto = new TagDTO();
+            $tag_dto->setArticleTagId($article_id);
+            $tag_dto->setTagId($tag_id);
+
+            $insert_tag_dto[] = $tag_dto;
+        }
+        return $insert_tag_dto;
     }
 }
