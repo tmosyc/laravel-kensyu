@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Repo\ArticleTagRepo;
 use App\Repo\PostArticleRepo;
 use Illuminate\Http\Request;
 use App\Models\Article;
@@ -17,7 +18,8 @@ class PostArticleController extends Controller
         if (self::loginCheck($session_email)===true){
             self::articleInsert(request(), $session_email);
             $article_list = Article::all();
-            return view('posts',['articles'=>$article_list]);
+            $tag_list = ArticleTagRepo::getByTagName();
+            return view('posts',['articles'=>$article_list,'tag_list'=>$tag_list]);
         } else {
             return view('posts',['error'=>'ログインされていないので投稿できませんでした']);
         }
@@ -33,9 +35,9 @@ class PostArticleController extends Controller
         $content = $request->input('content');
         $images = $request->file('images');
         $images_has = $request->hasFile('images');
+        $thumbnail_image_name = $request->input('check');
         $user_info = self::returnUserInfo($session_email);
         $image_array = self::imageArray($images,$images_has);
-        $thumbnail_image_name = $request->input('check');
         $thumbnail_number = self::thumbnailCheck($image_array,$thumbnail_image_name);
 
         $insert_article = [

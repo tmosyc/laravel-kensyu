@@ -23,6 +23,14 @@
             <input type='file' id='images' name='images[]' accept='image/*' multiple>
             <h5 class='image-attribute'></h5>
 
+            @if(isset($tag_list))
+                <select name="tags[]" multiple>
+                @foreach($tag_list as $tag)
+                    <option value={{$tag->tagname}}>{{$tag->tagname}}</option>
+                @endforeach
+                </select>
+            @endif
+
             <button type="submit">投稿</button>
             <script src="{{ asset('/js/ImageNameDisplay.js') }}"></script>
         </form>
