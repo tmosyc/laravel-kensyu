@@ -19,20 +19,14 @@ class TagTest extends TestCase
     public function test_タグを登録するための配列を作成できること()
     {
         $collect_dto = [
-            new TagDTO(1,2),
-            new TagDTO(1,3),
-            new TagDTO(1,4),
-            new TagDTO(1,5)
+            new TagDTO(5,"2"),
+            new TagDTO(5,"3"),
+            new TagDTO(5,"4"),
+            new TagDTO(5,"5"),
         ];
 
-        $tag_array =[
-            0 => "2",
-            1 => "3",
-            2 => "4",
-            3 => "5",
-        ];
-        $result = PostArticleController::createInsertTagArray(1,$tag_array);
-        self::assertSame($collect_dto,$result);
-
+        $tag_array =["2","3","4","5"];
+        $result = PostArticleController::createInsertTagArray(5,$tag_array);
+        self::assertEquals($collect_dto,$result);
     }
 }

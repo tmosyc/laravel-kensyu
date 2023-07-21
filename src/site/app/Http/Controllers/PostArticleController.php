@@ -135,9 +135,7 @@ class PostArticleController extends Controller
     {
         $insert_tag_dto = [];
         foreach ($tag_id_array as $tag_id) {
-            $tag_dto = new TagDTO();
-            $tag_dto->setArticleTagId($article_id);
-            $tag_dto->setTagId($tag_id);
+            $tag_dto = new TagDTO($article_id,$tag_id);
 
             $insert_tag_dto[] = $tag_dto;
         }
