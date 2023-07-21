@@ -14,9 +14,11 @@ use App\Repo\ArticleRepo;
 class DetailTest extends TestCase
 {
     use RefreshDatabase;
+    use WithoutMiddleware;
 
     public function test_詳細画面における文字がdbから取得できること()
     {
+        $this->withoutMiddleware();
 
         $inspection_title = 'タイトル';
         $inspection_content = 'コンテンツ';

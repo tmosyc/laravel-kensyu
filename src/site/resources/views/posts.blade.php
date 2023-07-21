@@ -16,12 +16,15 @@
         <button type="button" onclick="location.href='/register'">登録フォームはこちら</button>
         <button type="button" onclick="location.href='/login'">ログインフォームはこちら</button>
         <button type="button" onclick="location.href='/logout'">ログアウトはこちらをクリック</button>
-        <form action="/posts" method="post">
+        <form action="/posts" method="post" enctype="multipart/form-data">
             @csrf
             <input type="text" name="title" placeholder="タイトル">
             <input type="text" name="content" placeholder="テキスト">
+            <input type='file' id='images' name='images[]' accept='image/*' multiple>
+            <h5 class='image-attribute'></h5>
 
             <button type="submit">投稿</button>
+            <script src="{{ asset('/js/ImageNameDisplay.js') }}"></script>
         </form>
         @if(isset($error))
             <h4>{{$error}}</h4>
@@ -32,6 +35,13 @@
                 <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
                 <p>{{  $article->content }}</p>
                 <p>{{  $article->user_id }}</p>
+                @if($article-> thumbnail_image_id)
+                    @if(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.jpg'))
+                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.jpg')}}" width="250" height="200">
+                    @elseif(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.png'))
+                        <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.png')}}" width="250" height="200">
+                    @endif
+                @endif
             @endforeach
         @endif
     </body>
