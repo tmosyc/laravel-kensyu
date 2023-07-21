@@ -16,7 +16,7 @@ class TagTest extends TestCase
         $this->assertTrue(true);
     }
 
-    public function test_タグを登録するための配列を作成できること()
+    public function test_タグを登録するための配列を作成できること(): void
     {
         $collect_dto = [
             new TagDTO(5,"2"),

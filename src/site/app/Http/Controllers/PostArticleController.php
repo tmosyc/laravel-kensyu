@@ -131,7 +131,7 @@ class PostArticleController extends Controller
         return $mime;
     }
 
-    public static function createInsertTagArray($article_id,$tag_id_array)
+    public static function createInsertTagArray(int $article_id,array $tag_id_array): array
     {
         $insert_tag_dto = [];
         foreach ($tag_id_array as $tag_id) {
