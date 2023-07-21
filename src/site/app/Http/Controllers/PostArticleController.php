@@ -83,7 +83,7 @@ class PostArticleController extends Controller
         }
     }
 
-    public static function thumbnailCheck($image_array,$thumbnail_image_name): int | null
+    public static function thumbnailCheck(array $image_array,string $thumbnail_image_name): int | null
     {
         if ($image_array && $thumbnail_image_name) {
             $thumbnail_number = array_search($thumbnail_image_name, $image_array);
@@ -93,7 +93,7 @@ class PostArticleController extends Controller
         return $thumbnail_number;
     }
 
-    public static function imageArray($files,$images_has): array
+    public static function imageArray(array $files,bool $images_has): array
     {
         $image_array = [];
         if ($images_has) {

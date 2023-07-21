@@ -52,12 +52,8 @@ class ImageTest extends TestCase
             'test_image3.jpg'
         ];
 
-        $mock = Mockery::mock(Request::class);
-        $mock -> shouldReceive('hasFile')->with('images')->andReturn($dummyFilesArray);
-        $mock -> shouldReceive('file')->with('images')->andReturn($dummyFilesArray);
+        $result = PostArticleController::imageArray($dummyFilesArray,True);
 
-        $controller = new PostArticleController();
-        $result = $controller->imageArray($mock);
         self::assertSame($collect_array,$result);
     }
 
