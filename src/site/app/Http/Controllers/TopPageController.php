@@ -24,21 +24,20 @@ class TopPageController extends Controller
     }
 
     /**
-     * @return array
+     * @return ArticleRepo[]
      */
     public static function displayTopPageInfo()
     {
-        $select_article = Article::all();
+        $select_article = DB::table('articles')->join('users','articles.user_id','=','users.id')->get();
         $articles = [];
         foreach ($select_article as $article){
-            $user = ArticleRepo::getUsername($article->user_id);
 
             $article_dto = new ArticleDTO($article->article_id,
                 $article->title,
                 $article->content,
                 $article->thumbnail_image_id,
                 $article->user_id,
-                $user->name);
+                $article->name);
             $articles[] = $article_dto;
         }
         return $articles;
