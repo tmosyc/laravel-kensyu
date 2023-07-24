@@ -51,4 +51,9 @@ class ArticleRepo
         $username = User::where('id',$user_id)->first();
         return $username;
     }
+
+    public static function deleteRepo($article_id)
+    {
+        Article::where('article_id',$article_id)->delete;
+    }
 }

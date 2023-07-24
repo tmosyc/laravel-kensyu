@@ -9,7 +9,7 @@ class ArticleDTO
         public string $title,
         public string $content,
         public int $user_id,
-        public array $thumbnail_image_id,
+        public int $thumbnail_image_id,
         public string $username
     )
     {
