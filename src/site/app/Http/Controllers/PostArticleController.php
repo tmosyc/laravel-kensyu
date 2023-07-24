@@ -15,7 +15,6 @@ use Illuminate\Support\Facades\Session;
 use mysql_xdevapi\Collection;
 use App\DTO\TagDTO;
 use Illuminate\Support\Facades\Log;
-use PhpParser\Node\Expr\New_;
 
 
 class PostArticleController extends Controller

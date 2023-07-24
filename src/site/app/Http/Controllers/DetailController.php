@@ -14,7 +14,7 @@ class DetailController
         if ($article_id_list->contains('article_id', $article_id)) {
             $detail_article = ArticleRepo::detailArticle($article_id);
             $detail_article_images = ArticleRepo::getByDetailImages($article_id);
-            $detail_user = ArticleRepo::getByUsername($detail_article->user_id);
+            $detail_user = ArticleRepo::getUsername($detail_article->user_id);
             return view('detail',['detail_info'=>$detail_article,'detail_user'=>$detail_user,'detail_images'=>$detail_article_images]);
         } else {
             return view('notfound');

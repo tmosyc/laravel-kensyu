@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Repo\ArticleRepo;
 use App\Repo\ArticleTagRepo;
 use Illuminate\Http\Request;
 use App\Models\Article;
@@ -30,7 +31,7 @@ class TopPageController extends Controller
         $select_article = Article::all();
         $articles = [];
         foreach ($select_article as $article){
-            $user = self::getByUsername($article->user_id);
+            $user = ArticleRepo::getUsername($article->user_id);
 
             $article_dto = new ArticleDTO($article->article_id,
                 $article->title,
@@ -41,11 +42,5 @@ class TopPageController extends Controller
             $articles[] = $article_dto;
         }
         return $articles;
-    }
-
-    public static function getByUsername($user_id)
-    {
-        $user = User::where('id',$user_id)->first();
-        return $user;
     }
 }

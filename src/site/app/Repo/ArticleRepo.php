@@ -46,9 +46,9 @@ class ArticleRepo
         return $article_images;
     }
 
-    public static function getByUsername($user_id)
+    public static function getUsername($user_id)
     {
-        $user = User::where('id',$user_id)->first();
-        return $user;
+        $username = User::where('id',$user_id)->first();
+        return $username;
     }
 }
