@@ -53,15 +53,15 @@ class PostArticleController extends Controller
             'thumbnail_image_id' => $thumbnail_number
         ];
 
-        $article_id = Article::insertGetId($insert_article);
-        self::storeArticleImage(request(),$article_id);
-        self::storeThumbnail($article_id,$thumbnail_number,request());
-
-
-        $insert_tag_array=self::createInsertTagArray($article_id,$tag_id);
-
         try {
             DB::beginTransaction();
+            $article_id = Article::insertGetId($insert_article);
+            self::storeArticleImage(request(),$article_id);
+            self::storeThumbnail($article_id,$thumbnail_number,request());
+
+
+            $insert_tag_array=self::createInsertTagArray($article_id,$tag_id);
+
             foreach ($insert_tag_array as $insert_tag) {
                 ArticleTag::create(['article_tag_id' => $insert_tag->article_tag_id, 'tag_id' => $insert_tag->tag_id]);
             }
