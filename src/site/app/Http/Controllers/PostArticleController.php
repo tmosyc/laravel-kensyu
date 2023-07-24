@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ArticleRequest;
 use App\Models\ArticleTag;
 use App\Repo\ArticleTagRepo;
 use App\Repo\PostArticleRepo;
@@ -14,15 +15,16 @@ use Illuminate\Support\Facades\Session;
 use mysql_xdevapi\Collection;
 use App\DTO\TagDTO;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\New_;
 
 
 class PostArticleController extends Controller
 {
-    public static function postTopPage(?string $session_email)
+    public static function postTopPage(?string $session_email,ArticleRequest $request)
     {
         if (self::loginCheck($session_email)===true){
-            self::articleInsert(request(), $session_email);
-            $article_list = Article::all();
+            self::articleInsert($request, $session_email);
+            $article_list = TopPageController::displayTopPageInfo();
             $tag_list = ArticleTagRepo::getByTagName();
             return view('posts',['articles'=>$article_list,'tag_list'=>$tag_list]);
         } else {
@@ -30,41 +32,51 @@ class PostArticleController extends Controller
         }
     }
     /**
-     * @param Request $request
+     * @param ArticleRequest $request
      * @return \Illuminate\Contracts\View\View
      */
-    public static function articleInsert(Request $request, string $session_email): void
+    public static function articleInsert(ArticleRequest $request, string $session_email): void
     {
-        if (self::loginCheck($session_email))
-        $title = $request->input('title');
-        $content = $request->input('content');
-        $images = $request->file('images');
-        $images_has = $request->hasFile('images');
-        $thumbnail_image_name = $request->input('check');
-        $tag_id = $request->input('tags');
-        $user_info = self::returnUserInfo($session_email);
-        $image_array = self::imageArray($images,$images_has);
-        $thumbnail_number = self::thumbnailCheck($image_array,$thumbnail_image_name);
+        if (self::loginCheck($session_email)) {
+            $validatedData = $request->validated();
+            $title = $validatedData['title'];
+            $content = $validatedData['content'];
+            $images = $validatedData['images'] ?? null;
+            $images_has = $request->hasFile('images');
+            $thumbnail_image_name = $validatedData['check'] ?? null;
+            $tag_id = $validatedData['tags'] ?? null;
+            $user_info = self::returnUserInfo($session_email);
+            if ($images_has) {
+                $image_array = self::imageArray($images, $images_has);
+                $thumbnail_number = self::thumbnailCheck($image_array, $thumbnail_image_name);
+            } else {
+                $thumbnail_number = null;
+            }
 
-        $insert_article = [
-            'user_id' => $user_info[0],
-            'title' => $title,
-            'content' => $content,
-            'thumbnail_image_id' => $thumbnail_number
-        ];
+            $insert_article = [
+                'user_id' => $user_info[0],
+                'title' => $title,
+                'content' => $content,
+                'thumbnail_image_id' => $thumbnail_number
+            ];
+        }
 
         try {
             DB::beginTransaction();
+
             $article_id = Article::insertGetId($insert_article);
-            self::storeArticleImage(request(),$article_id);
-            self::storeThumbnail($article_id,$thumbnail_number,request());
+            self::storeArticleImage($request,$article_id);
+            self::storeThumbnail($article_id,$thumbnail_number,$request);
 
 
             $insert_tag_array=self::createInsertTagArray($article_id,$tag_id);
 
-            foreach ($insert_tag_array as $insert_tag) {
-                ArticleTag::create(['article_tag_id' => $insert_tag->article_tag_id, 'tag_id' => $insert_tag->tag_id]);
+            if ($insert_tag_array) {
+                foreach ($insert_tag_array as $insert_tag) {
+                    ArticleTag::create(['article_tag_id' => $insert_tag->article_tag_id, 'tag_id' => $insert_tag->tag_id]);
+                }
             }
+            DB::commit();
         } catch (Exception $e) {
             DB::rollBack();
             Log::error((string)$e);
@@ -87,7 +99,7 @@ class PostArticleController extends Controller
         return $check;
     }
 
-    public static function storeArticleImage(Request $request,int $article_id): void
+    public static function storeArticleImage(ArticleRequest $request,int $article_id): void
     {
         $images = $request->file('images');
         $resource_id = 0;
@@ -104,7 +116,7 @@ class PostArticleController extends Controller
         }
     }
 
-    public static function thumbnailCheck(array $image_array,string $thumbnail_image_name): int | null
+    public static function thumbnailCheck(array $image_array,string|null $thumbnail_image_name): int | null
     {
         if ($image_array && $thumbnail_image_name) {
             $thumbnail_number = array_search($thumbnail_image_name, $image_array);
@@ -126,7 +138,7 @@ class PostArticleController extends Controller
         return $image_array;
     }
 
-    private static function storeThumbnail(int $article_id,int $thumbnail_number,Request $request): string
+    private static function storeThumbnail(int $article_id,int|null $thumbnail_number,ArticleRequest $request): string
     {
         if ($request->hasFile('images')) {
             $thumbnail_image = $request->file('images')[$thumbnail_number];

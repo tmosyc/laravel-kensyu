@@ -8,6 +8,13 @@
     </head>
     <body>
         <h1>記事一覧</h1>
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
         @if(Illuminate\Support\Facades\Session::has('name'))
             <h3>{{Illuminate\Support\Facades\Session::get('name')}}さんがログインしています</h3>
         @else

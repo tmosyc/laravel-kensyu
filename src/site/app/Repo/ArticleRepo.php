@@ -4,6 +4,7 @@ namespace App\Repo;
 
 use App\Models\Article;
 use App\Models\Image;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class ArticleRepo
@@ -43,5 +44,11 @@ class ArticleRepo
     {
         $article_images = Image::where('article_id',$article_id)->get();
         return $article_images;
+    }
+
+    public static function getByUsername($user_id)
+    {
+        $user = User::where('id',$user_id)->first();
+        return $user;
     }
 }

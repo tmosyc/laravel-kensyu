@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->char('title',50);
             $table->text('content');
-            $table->integer('thumbnail_image_id');
+            $table->integer('thumbnail_image_id')->nullable();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
         });
