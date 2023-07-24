@@ -1,5 +1,5 @@
 .env_file
 .DS_Store
+/memo.txt
 /src/.DS_Store
 /docker/mysql/data
-memo

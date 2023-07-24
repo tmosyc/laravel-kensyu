@@ -6,12 +6,10 @@ namespace App\DTO;
 
 class TagDTO
 {
-    public $article_tag_id;
-    public $tag_id;
-
-    public function __construct($article_tag_id, $tag_id)
+    public function __construct(
+        public int $article_tag_id,
+        public int $tag_id
+    )
     {
-        $this->article_tag_id = $article_tag_id;
-        $this->tag_id = $tag_id;
     }
 }

@@ -6,12 +6,15 @@ namespace App\Http\Controllers;
 use App\Models\ArticleTag;
 use App\Repo\ArticleTagRepo;
 use App\Repo\PostArticleRepo;
+use Exception;
 use Illuminate\Http\Request;
 use App\Models\Article;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use mysql_xdevapi\Collection;
 use App\DTO\TagDTO;
+use Illuminate\Support\Facades\Log;
+
 
 class PostArticleController extends Controller
 {
@@ -56,9 +59,16 @@ class PostArticleController extends Controller
 
 
         $insert_tag_array=self::createInsertTagArray($article_id,$tag_id);
-        foreach ($insert_tag_array as $insert_tag)
-            ArticleTag::create(['article_tag_id'=>$insert_tag->article_tag_id, 'tag_id'=>$insert_tag->tag_id]);
 
+        try {
+            DB::beginTransaction();
+            foreach ($insert_tag_array as $insert_tag) {
+                ArticleTag::create(['article_tag_id' => $insert_tag->article_tag_id, 'tag_id' => $insert_tag->tag_id]);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            Log::error((string)$e);
+        }
     }
 
     public static function returnUserInfo(?string $session_email): array
@@ -131,6 +141,11 @@ class PostArticleController extends Controller
         return $mime;
     }
 
+    /**
+     * @param int $article_id
+     * @param array $tag_id_array
+     * @return TagDTO[]
+     */
     public static function createInsertTagArray(int $article_id,array $tag_id_array): array
     {
         $insert_tag_dto = [];
