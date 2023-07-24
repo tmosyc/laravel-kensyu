@@ -16,7 +16,9 @@
     <form action="/posts/{{$detail_info->article_id}}/update" method="GET">
         <button type="submit">更新</button>
     </form>
-    <form action="/posts/{{$detail_info->article_id}}/delete">
+    <form action="/posts/{{$detail_info->article_id}}/delete" method="POST">
+        @csrf
+        @method('delete')
         <input type="hidden" name="_method" value="delete">
         <button type="submit">削除</button>
     </form>

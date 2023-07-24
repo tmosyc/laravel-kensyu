@@ -9,7 +9,7 @@ class DeleteController
 {
     public static function deleteArticle($article_id)
     {
-        ArticleRepo::detailArticle($article_id);
-        return ('/posts');
+        ArticleRepo::deleteRepo($article_id);
+        return redirect('/posts');
     }
 }

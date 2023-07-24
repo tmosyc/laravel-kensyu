@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostArticleController;
@@ -75,4 +76,3 @@ Route::delete('/posts/{article_id}/delete',function ($article_id) {
     $delete_controller = app()->make(DeleteController::class);
     return $delete_controller->deleteArticle($article_id);
 });
-

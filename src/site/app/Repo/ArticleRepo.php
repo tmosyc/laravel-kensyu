@@ -54,6 +54,6 @@ class ArticleRepo
 
     public static function deleteRepo($article_id)
     {
-        Article::where('article_id',$article_id)->delete;
+        Article::where('article_id',$article_id)->delete();
     }
 }
