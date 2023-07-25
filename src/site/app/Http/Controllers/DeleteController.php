@@ -2,12 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\ArticleDTO;
-use App\Models\Article;
-use App\Models\User;
 use App\Repo\ArticleRepo;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Session;
 
 class DeleteController
