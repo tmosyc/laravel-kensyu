@@ -8,7 +8,7 @@ class TagDTO
 {
     public function __construct(
         public int $article_tag_id,
-        public int $tag_id
+        public string $tag_id
     )
     {
     }

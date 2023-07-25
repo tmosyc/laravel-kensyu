@@ -9,7 +9,7 @@
 <body>
     <h2>{{$detail_info->title}}</h2>
     <a>{{$detail_info->content}}</a>
-    <a>{{$detail_info->user_id}}</a>
+    <a>{{$detail_user->name}}</a>
     @foreach($detail_images as $detail_image)
         <img src="{{asset('storage/article/' . $detail_info->article_id . '/' . $detail_image->resource_id .'.'. $detail_image->mime)}}" width="250" height="200">
     @endforeach

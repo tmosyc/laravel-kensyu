@@ -8,6 +8,13 @@
     </head>
     <body>
         <h1>記事一覧</h1>
+        @if ($errors->any())
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        @endif
         @if(Illuminate\Support\Facades\Session::has('name'))
             <h3>{{Illuminate\Support\Facades\Session::get('name')}}さんがログインしています</h3>
         @else
@@ -42,7 +49,7 @@
             @foreach($articles as $article)
                 <h2><a href="posts/{{$article->article_id}}">{{  $article->title }}</a></h2>
                 <p>{{  $article->content }}</p>
-                <p>{{  $article->user_id }}</p>
+                <p>{{  $article->username }}</p>
                 @if($article-> thumbnail_image_id)
                     @if(asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id . '.jpg'))
                         <img src="{{asset('storage/thumbnail/' . $article->article_id . '/' . $article->thumbnail_image_id .'.jpg')}}" width="250" height="200">
