@@ -78,11 +78,12 @@ class ArticleRepo
         Article::where('article_id',$article_id)->delete();
     }
 
-    public static function auth_user(int $article_id)
+    public static function auth_user(int $session_id,int $article_id): Article|null
     {
-        $article = Article::where('article_id',$article_id)->first();
-        $user_id = $article->user_id;
-        $user = User::where('id',$user_id)->first();
-        return $user;
+        $article = Article::where([
+            ['article_id', $article_id],
+            ['user_id',$session_id]
+        ]);
+        return $article;
     }
 }

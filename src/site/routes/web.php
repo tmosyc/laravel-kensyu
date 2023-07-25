@@ -73,6 +73,7 @@ Route::put('/posts/{article_id}/update', function ($article_id) {
 });
 
 Route::delete('/posts/{article_id}/delete',function ($article_id) {
+    $session_id = Session::get('id');
     $delete_controller = app()->make(DeleteController::class);
-    return $delete_controller->deleteArticle($article_id);
+    return $delete_controller->deleteArticle($session_id,$article_id);
 });
