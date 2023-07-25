@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DeleteController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\LogoutController;
 use App\Http\Controllers\PostArticleController;
@@ -71,3 +72,8 @@ Route::put('/posts/{article_id}/update', function ($article_id) {
     return $update_controller->updateData($article_id, $session_id,request());
 });
 
+Route::delete('/posts/{article_id}/delete',function ($article_id) {
+    $session_id = Session::get('id');
+    $delete_controller = app()->make(DeleteController::class);
+    return $delete_controller->deleteArticle($session_id,$article_id);
+});

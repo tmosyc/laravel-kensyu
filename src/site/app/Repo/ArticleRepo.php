@@ -47,7 +47,7 @@ class ArticleRepo
         return $article_images;
     }
 
-    public static function getUsername($user_id)
+    public static function getUsername(int $user_id)
     {
         $username = User::where('id',$user_id)->first();
         return $username;
@@ -71,5 +71,19 @@ class ArticleRepo
             $articles[] = $article_dto;
         }
         return $articles;
+    }
+
+    public static function deleteRepo(int $article_id)
+    {
+        Article::where('article_id',$article_id)->delete();
+    }
+
+    public static function auth_user(int $session_id,int $article_id): Article|null
+    {
+        $article = Article::where([
+            ['article_id', $article_id],
+            ['user_id',$session_id]
+        ]);
+        return $article;
     }
 }
