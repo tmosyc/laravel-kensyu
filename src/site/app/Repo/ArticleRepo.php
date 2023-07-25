@@ -2,6 +2,7 @@
 
 namespace App\Repo;
 
+use App\DTO\ArticleDTO;
 use App\Models\Article;
 use App\Models\Image;
 use App\Models\User;
@@ -50,5 +51,25 @@ class ArticleRepo
     {
         $username = User::where('id',$user_id)->first();
         return $username;
+    }
+
+    /**
+     * @return ArticleDTO[]
+     */
+    public static function displayTopPageInfo()
+    {
+        $select_article = DB::table('articles')->join('users','articles.user_id','=','users.id')->get();
+        $articles = [];
+        foreach ($select_article as $article){
+
+            $article_dto = new ArticleDTO($article->article_id,
+                $article->title,
+                $article->content,
+                $article->thumbnail_image_id,
+                $article->user_id,
+                $article->name);
+            $articles[] = $article_dto;
+        }
+        return $articles;
     }
 }
