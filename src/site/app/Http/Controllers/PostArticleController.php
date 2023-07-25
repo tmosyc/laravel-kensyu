@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ArticleRequest;
 use App\Models\ArticleTag;
+use App\Repo\ArticleRepo;
 use App\Repo\ArticleTagRepo;
 use App\Repo\PostArticleRepo;
 use Exception;
@@ -23,7 +24,7 @@ class PostArticleController extends Controller
     {
         if (self::loginCheck($session_email)===true){
             self::articleInsert($request, $session_email);
-            $article_list = TopPageController::displayTopPageInfo();
+            $article_list = ArticleRepo::displayTopPageInfo();
             $tag_list = ArticleTagRepo::getByTagName();
             return view('posts',['articles'=>$article_list,'tag_list'=>$tag_list]);
         } else {

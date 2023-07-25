@@ -18,29 +18,10 @@ class TopPageController extends Controller
      */
     public static function topPageView()
     {
-        $article_list = self::displayTopPageInfo();
+        $article_list = ArticleRepo::displayTopPageInfo();
         $tag_list = ArticleTagRepo::getByTagName();
         return view('posts',['articles'=>$article_list,'tag_list'=>$tag_list]);
     }
 
-    /**
-     * @return array
-     */
-    public static function displayTopPageInfo()
-    {
-        $select_article = Article::all();
-        $articles = [];
-        foreach ($select_article as $article){
-            $user = ArticleRepo::getUsername($article->user_id);
 
-            $article_dto = new ArticleDTO($article->article_id,
-                $article->title,
-                $article->content,
-                $article->thumbnail_image_id,
-                $article->user_id,
-                $user->name);
-            $articles[] = $article_dto;
-        }
-        return $articles;
-    }
 }
